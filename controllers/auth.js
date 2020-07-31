@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const crearUsuario = async (req, res = response) => {
     const { email, password } = req.body;
-    //manejo de errores
     try {
         let usuario = await Usuario.findOne({ email });
         if (usuario) {
@@ -24,15 +23,26 @@ const crearUsuario = async (req, res = response) => {
     }
 };
 
-const loginUsuario = (req, res = response) => {
-    //manejo de errores
-
-    const { name, email, password } = req.body;
-    res.json({
+const loginUsuario = async (req, res = response) => {
+    const { email, password } = req.body;
+    let usuario;
+    try {
+        usuario = await Usuario.findOne({ email });
+        if (!usuario) {
+            return res.status(400).json({ ok: false, msg: 'Un usuario no existe con ese email' });
+        }
+        const validPassword = bcrypt.compareSync(password, usuario.password);
+        if (!validPassword) {
+            return res.status(400).json({ ok: false, msg: 'Password incorrecto' });
+        }
+    } catch (error) {
+        res.status(500).json({ ok: false, msg: 'Porfavor hable con el admin' });
+        throw error;
+    }
+    res.status(201).json({
         ok: true,
-        msg: 'login',
-        email,
-        password,
+        uid: usuario.id,
+        name: usuario.name,
     });
 };
 const revalidarToken = (req, res = response) => {
