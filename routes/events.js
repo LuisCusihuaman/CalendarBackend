@@ -1,5 +1,6 @@
 // Event Routes
 // /api/events
+
 const { Router } = require('express');
 const router = Router();
 const {} = require('../middlewares/validar-campos');
