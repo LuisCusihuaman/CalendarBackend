@@ -18,7 +18,7 @@
 		"express-validator": "^6.6.0",
 		"jsonwebtoken": "^9.0.0",
 		"moment": "^2.29.2",
-		"mongoose": "^5.9.26",
+		"mongoose": "^5.13.15",
 		"pretty-error": "^2.1.1"
 	}
 }
